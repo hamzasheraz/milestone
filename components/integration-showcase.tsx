@@ -105,7 +105,7 @@ const integrationCategories = {
 }
 
 export default function IntegrationShowcase() {
-  const [activeCategory, setActiveCategory] = useState("communication")
+  const setActiveCategory = useState("communication")[1]
 
   return (
     <div className="space-y-8">
@@ -142,7 +142,7 @@ export default function IntegrationShowcase() {
       </Tabs>
 
       <div className="text-center mt-12">
-        <p className="text-muted-foreground mb-4">Don't see the integration you need?</p>
+        <p className="text-muted-foreground mb-4">Don&apos;t see the integration you need?</p>
         <Button variant="outline">Request an Integration</Button>
       </div>
     </div>
