@@ -40,8 +40,8 @@ export default function HeroAnimation() {
       color: string
 
       constructor() {
-        this.x = Math.random() * canvas.width
-        this.y = Math.random() * canvas.height
+        this.x = Math.random() * (canvas?.width || 0)
+        this.y = Math.random() * (canvas?.height || 0)
         this.size = Math.random() * 3 + 1
         this.speedX = (Math.random() - 0.5) * 1
         this.speedY = (Math.random() - 0.5) * 1
@@ -52,13 +52,16 @@ export default function HeroAnimation() {
         this.x += this.speedX
         this.y += this.speedY
 
-        if (this.x > canvas.width) this.x = 0
-        else if (this.x < 0) this.x = canvas.width
-        if (this.y > canvas.height) this.y = 0
-        else if (this.y < 0) this.y = canvas.height
+        if (canvas) {
+          if (this.x > canvas.width) this.x = 0
+          else if (this.x < 0) this.x = canvas.width
+          if (this.y > canvas.height) this.y = 0
+          else if (this.y < 0) this.y = canvas.height
+        }
       }
 
       draw() {
+        if (!ctx) return
         ctx.fillStyle = this.color
         ctx.beginPath()
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2)
@@ -73,6 +76,7 @@ export default function HeroAnimation() {
 
     // Connect particles
     function connectParticles() {
+      if (!ctx) return
       for (let i = 0; i < particles.length; i++) {
         for (let j = i; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x
@@ -94,36 +98,48 @@ export default function HeroAnimation() {
 
     // Draw meeting UI elements
     function drawMeetingUI() {
+      if (!ctx) return
+
       // Draw meeting window
       ctx.fillStyle = "#ffffff"
       ctx.strokeStyle = "#e2e8f0"
       ctx.lineWidth = 2
       ctx.beginPath()
-      ctx.roundRect(canvas.width / 2 - 150, canvas.height / 2 - 100, 300, 200, 10)
+      if (canvas) {
+        ctx.roundRect(canvas.width / 2 - 150, canvas.height / 2 - 100, 300, 200, 10)
+      }
       ctx.fill()
       ctx.stroke()
 
       // Draw header
       ctx.fillStyle = "#f8fafc"
       ctx.beginPath()
-      ctx.roundRect(canvas.width / 2 - 150, canvas.height / 2 - 100, 300, 40, [10, 10, 0, 0])
+      if (canvas) {
+        ctx.roundRect(canvas.width / 2 - 150, canvas.height / 2 - 100, 300, 40, [10, 10, 0, 0])
+      }
       ctx.fill()
 
       // Draw title
       ctx.fillStyle = "#334155"
       ctx.font = "14px sans-serif"
-      ctx.fillText("Weekly Team Meeting", canvas.width / 2 - 70, canvas.height / 2 - 75)
+      if (canvas) {
+        ctx.fillText("Weekly Team Meeting", canvas.width / 2 - 70, canvas.height / 2 - 75)
+      }
 
       // Draw AI assistant icon
       ctx.fillStyle = "#3b82f6"
       ctx.beginPath()
-      ctx.arc(canvas.width / 2 + 130, canvas.height / 2 - 80, 15, 0, Math.PI * 2)
+      if (canvas) {
+        ctx.arc(canvas.width / 2 + 130, canvas.height / 2 - 80, 15, 0, Math.PI * 2)
+      }
       ctx.fill()
 
       // Draw AI icon
       ctx.fillStyle = "#ffffff"
       ctx.font = "bold 14px sans-serif"
-      ctx.fillText("AI", canvas.width / 2 + 123, canvas.height / 2 - 75)
+      if (canvas) {
+        ctx.fillText("AI", canvas.width / 2 + 123, canvas.height / 2 - 75)
+      }
 
       // Draw meeting content
       ctx.fillStyle = "#64748b"
@@ -142,13 +158,17 @@ export default function HeroAnimation() {
       ]
 
       lines.forEach((line, index) => {
-        ctx.fillText(line, canvas.width / 2 - 130, canvas.height / 2 - 40 + index * 20)
+        if (canvas) {
+          ctx.fillText(line, canvas.width / 2 - 130, canvas.height / 2 - 40 + index * 20)
+        }
       })
     }
 
     // Animation loop
     function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      if (canvas && ctx) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+      }
 
       // Update and draw particles
       for (let i = 0; i < particles.length; i++) {
